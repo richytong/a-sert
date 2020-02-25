@@ -1,0 +1,25 @@
+{
+  "name": "a-sert",
+  "version": "0.0.0",
+  "description": "✅ functional assertions",
+  "author": "Richard Tong",
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "github:richytong/a-sert"
+  },
+  "keywords": [
+    "a-sert",
+    "a",
+    "assert",
+    "async",
+    "test",
+    "testing",
+    "functional",
+    "fp"
+  ],
+  "dependencies": {
+    "rubico": "^0.1.81"
+  }
+}
