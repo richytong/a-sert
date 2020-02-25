@@ -1,5 +1,5 @@
 # a-sert
-✅ functional assertions
+☑ functional assertions
 
 ## Why?
 - I like functional programming

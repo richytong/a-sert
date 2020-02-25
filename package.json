@@ -1,7 +1,7 @@
 {
   "name": "a-sert",
   "version": "0.0.0",
-  "description": "✅ functional assertions",
+  "description": "☑ functional assertions",
   "author": "Richard Tong",
   "license": "ISC",
   "main": "index.js",
