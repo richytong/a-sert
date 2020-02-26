@@ -20,6 +20,7 @@
     "fp"
   ],
   "dependencies": {
+    "deep-equal": "^2.0.1",
     "rubico": "^0.1.81"
   }
 }
