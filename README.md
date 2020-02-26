@@ -15,7 +15,6 @@ then checks for strict or deep equality of their computed values
 
 ## Examples
 Basic usage
-`a.eq`
 ```javascript
 const a = require('a-sert')
 
