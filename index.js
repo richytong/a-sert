@@ -26,12 +26,11 @@ a.eq = (...fns) => {
   const e = new Error()
   e.name = 'AssertionError'
   Error.captureStackTrace(e)
-  return x => {
-    const fns0 = _.toFn(fns[0])
-    const first = _.toFn(fns[0])(x)
+  return async x => {
+    const first = await _.toFn(fns[0])(x)
     let i = 1
     while (i < fns.length) {
-      const next = _.toFn(fns[i])(x)
+      const next = await _.toFn(fns[i])(x)
       if (!isDeepEqual(first, next)) {
         const op = _.is(Object)(first) ? '!deepEqual' : '!=='
         e.message = fmtErrorMessage(first, op, next)
@@ -43,18 +42,17 @@ a.eq = (...fns) => {
   }
 }
 
-a.neq = (...fns) => {
+a.eq.sync = (...fns) => {
   const e = new Error()
   e.name = 'AssertionError'
   Error.captureStackTrace(e)
   return x => {
-    const fns0 = _.toFn(fns[0])
     const first = _.toFn(fns[0])(x)
     let i = 1
     while (i < fns.length) {
       const next = _.toFn(fns[i])(x)
-      if (isDeepEqual(first, next)) {
-        const op = _.is(Object)(first) ? 'deepEqual' : '==='
+      if (!isDeepEqual(first, next)) {
+        const op = _.is(Object)(first) ? '!deepEqual' : '!=='
         e.message = fmtErrorMessage(first, op, next)
         throw e
       }
