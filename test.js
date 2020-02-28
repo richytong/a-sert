@@ -131,9 +131,10 @@ describe('a-sert', () => {
           new TypeError('ho'),
         )(1),
         newAssertionError([
-          'TypeError correctly thrown with wrong message;',
-          'expected hey, got ho',
-        ].join(' '))
+          'TypeError correctly thrown with wrong message',
+          '\n       expect: hey',
+          '\n       thrown: ho',
+        ].join(''))
       )
     })
   })
@@ -166,9 +167,10 @@ describe('a-sert', () => {
           new TypeError('ho'),
         )(1),
         newAssertionError([
-          'TypeError correctly thrown with wrong message;',
-          'expected hey, got ho',
-        ].join(' '))
+          'TypeError correctly thrown with wrong message',
+          '\n       expect: hey',
+          '\n       thrown: ho',
+        ].join(''))
       )
     })
   })

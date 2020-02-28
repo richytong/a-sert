@@ -85,12 +85,11 @@ a.err = (fn, ee) => {
         throw e
       }
       if (fe.message !== ee.message) {
-        e.message = `${fe.name} correctly thrown with wrong message:\n${fe.message}`
         e.message = [
-          `${fe.name} correctly thrown with wrong message;`,
-          `expected ${fe.message},`,
-          `got ${ee.message}`,
-        ].join(' ')
+          `${fe.name} correctly thrown with wrong message`,
+          `\n       expect: ${fe.message}`,
+          `\n       thrown: ${ee.message}`,
+        ].join('')
         throw e
       }
       return x
@@ -113,12 +112,11 @@ a.err.sync = (fn, ee) => {
         throw e
       }
       if (fe.message !== ee.message) {
-        e.message = `${fe.name} correctly thrown with wrong message:\n${fe.message}`
         e.message = [
-          `${fe.name} correctly thrown with wrong message;`,
-          `expected ${fe.message},`,
-          `got ${ee.message}`,
-        ].join(' ')
+          `${fe.name} correctly thrown with wrong message`,
+          `\n       expect: ${fe.message}`,
+          `\n       thrown: ${ee.message}`,
+        ].join('')
         throw e
       }
       return x
