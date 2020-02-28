@@ -6,14 +6,24 @@ const isDeepEqual = (x, y) => deepEqual(x, y, { strict: true })
 const a = {}
 
 const fmtType = x => {
-  if (_.is('string')(x)) return `\'${x}\'`
-  if (_.is('undefined')(x)) return 'undefined'
+  if (x === undefined) return 'undefined'
   if (x === null) return 'null'
-  if (_.is(Set)(x)) return `Set(${Array.from(x).join(',')})`
-  if (_.is(Map)(x)) return `Map(${_.stringifyJSON(_.entriesToObject(x))})`
-  if (_.is(Buffer)(x)) return `Buffer('${_.toString(x)}')`
-  if (_.is(Object)(x)) return _.stringifyJSON(x)
+  if (_.isString(x)) return `\'${x}\'`
+  if (_.isArray(x)) return `[${Array.from(x).join(',')}]`
+  if (_.isSet(x)) return `Set(${Array.from(x).join(',')})`
+  if (_.isMap(x)) return `Map(${JSON.stringify(Object.fromEntries(x))})`
+  if (_.isBuffer(x)) return `Buffer('${_.toString(x)}')`
+  if (_.isObject(x)) return JSON.stringify(x)
   return x
+}
+
+const fmtOp = x => {
+  if (x === undefined) return '!=='
+  if (x === null) return '!=='
+  if (_.isString(x)) return '!=='
+  if (_.isNumber(x)) return '!=='
+  if (_.isBoolean(x)) return '!=='
+  return '!deepEqual'
 }
 
 const fmtErrorMessage = (x, operator, y) => [
@@ -32,7 +42,7 @@ a.eq = (...fns) => {
     while (i < fns.length) {
       const next = await _.toFn(fns[i])(x)
       if (!isDeepEqual(first, next)) {
-        const op = _.is(Object)(first) ? '!deepEqual' : '!=='
+        const op = fmtOp(first)
         e.message = fmtErrorMessage(first, op, next)
         throw e
       }
@@ -52,7 +62,7 @@ a.eq.sync = (...fns) => {
     while (i < fns.length) {
       const next = _.toFn(fns[i])(x)
       if (!isDeepEqual(first, next)) {
-        const op = _.is(Object)(first) ? '!deepEqual' : '!=='
+        const op = fmtOp(first)
         e.message = fmtErrorMessage(first, op, next)
         throw e
       }
