@@ -72,4 +72,60 @@ a.eq.sync = (...fns) => {
   }
 }
 
+a.err = (fn, ee) => {
+  const e = new Error()
+  e.name = 'AssertionError'
+  Error.captureStackTrace(e)
+  return async x => {
+    try {
+      await fn(x)
+    } catch (fe) {
+      if (fe.name !== ee.name) {
+        e.message = `${fe.name} thrown; expected ${ee.name}`
+        throw e
+      }
+      if (fe.message !== ee.message) {
+        e.message = `${fe.name} correctly thrown with wrong message:\n${fe.message}`
+        e.message = [
+          `${fe.name} correctly thrown with wrong message;`,
+          `expected ${fe.message},`,
+          `got ${ee.message}`,
+        ].join(' ')
+        throw e
+      }
+      return x
+    }
+    e.message = `did not throw ${ee}`
+    throw e
+  }
+}
+
+a.err.sync = (fn, ee) => {
+  const e = new Error()
+  e.name = 'AssertionError'
+  Error.captureStackTrace(e)
+  return x => {
+    try {
+      fn(x)
+    } catch (fe) {
+      if (fe.name !== ee.name) {
+        e.message = `${fe.name} thrown; expected ${ee.name}`
+        throw e
+      }
+      if (fe.message !== ee.message) {
+        e.message = `${fe.name} correctly thrown with wrong message:\n${fe.message}`
+        e.message = [
+          `${fe.name} correctly thrown with wrong message;`,
+          `expected ${fe.message},`,
+          `got ${ee.message}`,
+        ].join(' ')
+        throw e
+      }
+      return x
+    }
+    e.message = `did not throw ${ee}`
+    throw e
+  }
+}
+
 module.exports = a
