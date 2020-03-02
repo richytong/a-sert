@@ -72,57 +72,50 @@ a.eq.sync = (...fns) => {
   }
 }
 
-a.err = (fn, ee) => {
-  const e = new Error()
-  e.name = 'AssertionError'
-  Error.captureStackTrace(e)
+const handleErrorExpectations = (ae, ee, fe) => {
+  if (fe.name !== ee.name) {
+    ae.message = `${fe.name} thrown; expected ${ee.name}`
+    throw ae
+  }
+  if (fe.message !== ee.message) {
+    ae.message = [
+      `${fe.name} correctly thrown with wrong message`,
+      `\n       expect: ${ee.message}`,
+      `\n       thrown: ${fe.message}`,
+    ].join('')
+    throw ae
+  }
+}
+
+a.err = (ee, fn) => {
+  const ae = new Error()
+  ae.name = 'AssertionError'
+  Error.captureStackTrace(ae)
   return async x => {
     try {
       await fn(x)
     } catch (fe) {
-      if (fe.name !== ee.name) {
-        e.message = `${fe.name} thrown; expected ${ee.name}`
-        throw e
-      }
-      if (fe.message !== ee.message) {
-        e.message = [
-          `${fe.name} correctly thrown with wrong message`,
-          `\n       expect: ${fe.message}`,
-          `\n       thrown: ${ee.message}`,
-        ].join('')
-        throw e
-      }
+      handleErrorExpectations(ae, ee, fe)
       return x
     }
-    e.message = `did not throw ${ee}`
-    throw e
+    ae.message = `did not throw ${ee}`
+    throw ae
   }
 }
 
-a.err.sync = (fn, ee) => {
-  const e = new Error()
-  e.name = 'AssertionError'
-  Error.captureStackTrace(e)
+a.err.sync = (ee, fn) => {
+  const ae = new Error()
+  ae.name = 'AssertionError'
+  Error.captureStackTrace(ae)
   return x => {
     try {
       fn(x)
     } catch (fe) {
-      if (fe.name !== ee.name) {
-        e.message = `${fe.name} thrown; expected ${ee.name}`
-        throw e
-      }
-      if (fe.message !== ee.message) {
-        e.message = [
-          `${fe.name} correctly thrown with wrong message`,
-          `\n       expect: ${fe.message}`,
-          `\n       thrown: ${ee.message}`,
-        ].join('')
-        throw e
-      }
+      handleErrorExpectations(ae, ee, fe)
       return x
     }
-    e.message = `did not throw ${ee}`
-    throw e
+    ae.message = `did not throw ${ee}`
+    throw ae
   }
 }
 

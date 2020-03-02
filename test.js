@@ -107,8 +107,8 @@ describe('a-sert', () => {
     it('expects an error', async () => {
       assert.rejects(
         () => a.err(
-          x => x,
           new Error('yo'),
+          x => x,
         )(1),
         newAssertionError('did not throw Error: yo'),
       )
@@ -117,8 +117,8 @@ describe('a-sert', () => {
     it('asserts error name', async () => {
       assert.rejects(
         () => a.err(
-          () => { throw new TypeError('hey') },
           new RangeError('hey'),
+          () => { throw new TypeError('hey') },
         )(1),
         newAssertionError('TypeError thrown; expected RangeError'),
       )
@@ -127,13 +127,13 @@ describe('a-sert', () => {
     it('asserts error message', async () => {
       assert.rejects(
         () => a.err(
-          () => { throw new TypeError('hey') },
           new TypeError('ho'),
+          () => { throw new TypeError('hey') },
         )(1),
         newAssertionError([
           'TypeError correctly thrown with wrong message',
-          '\n       expect: hey',
-          '\n       thrown: ho',
+          '\n       expect: ho',
+          '\n       thrown: hey',
         ].join(''))
       )
     })
@@ -143,8 +143,8 @@ describe('a-sert', () => {
     it('expects a sync error', async () => {
       assert.throws(
         () => a.err.sync(
-          x => x,
           new Error('yo'),
+          x => x,
         )(1),
         newAssertionError('did not throw Error: yo'),
       )
@@ -153,8 +153,8 @@ describe('a-sert', () => {
     it('syncly asserts error name', async () => {
       assert.throws(
         () => a.err.sync(
-          () => { throw new TypeError('hey') },
           new RangeError('hey'),
+          () => { throw new TypeError('hey') },
         )(1),
         newAssertionError('TypeError thrown; expected RangeError'),
       )
@@ -163,13 +163,13 @@ describe('a-sert', () => {
     it('syncly asserts error message', async () => {
       assert.throws(
         () => a.err.sync(
-          () => { throw new TypeError('hey') },
           new TypeError('ho'),
+          () => { throw new TypeError('hey') },
         )(1),
         newAssertionError([
           'TypeError correctly thrown with wrong message',
-          '\n       expect: hey',
-          '\n       thrown: ho',
+          '\n       expect: ho',
+          '\n       thrown: hey',
         ].join(''))
       )
     })
