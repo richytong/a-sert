@@ -36,11 +36,12 @@ a.eq = (...fns) => {
   const e = new Error()
   e.name = 'AssertionError'
   Error.captureStackTrace(e)
-  return async x => {
-    const first = await _.toFn(fns[0])(x)
+  fns = fns.map(_.toFn)
+  const ret = async x => {
+    const first = await fns[0](x)
     let i = 1
     while (i < fns.length) {
-      const next = await _.toFn(fns[i])(x)
+      const next = await fns[i](x)
       if (!isDeepEqual(first, next)) {
         const op = fmtOp(first)
         e.message = fmtErrorMessage(first, op, next)
@@ -50,17 +51,21 @@ a.eq = (...fns) => {
     }
     return x
   }
+  _.setName(ret, `a-sert.eq(${fns.map(_.getName).join(', ')})`)
+  return ret
 }
+_.setName(a.eq, 'a-sert.eq')
 
 a.eq.sync = (...fns) => {
   const e = new Error()
   e.name = 'AssertionError'
   Error.captureStackTrace(e)
-  return x => {
-    const first = _.toFn(fns[0])(x)
+  fns = fns.map(_.toFn)
+  const ret = x => {
+    const first = fns[0](x)
     let i = 1
     while (i < fns.length) {
-      const next = _.toFn(fns[i])(x)
+      const next = fns[i](x)
       if (!isDeepEqual(first, next)) {
         const op = fmtOp(first)
         e.message = fmtErrorMessage(first, op, next)
@@ -70,7 +75,10 @@ a.eq.sync = (...fns) => {
     }
     return x
   }
+  _.setName(ret, `a-sert.eq(${fns.map(_.getName).join(', ')})`)
+  return ret
 }
+_.setName(a.eq.sync, 'a-sert.eq')
 
 const handleErrorExpectations = (ae, ee, fe) => {
   if (fe.name !== ee.name) {
@@ -91,7 +99,7 @@ a.err = (ee, fn) => {
   const ae = new Error()
   ae.name = 'AssertionError'
   Error.captureStackTrace(ae)
-  return async x => {
+  const ret = async x => {
     try {
       await fn(x)
     } catch (fe) {
@@ -101,13 +109,16 @@ a.err = (ee, fn) => {
     ae.message = `did not throw ${ee}`
     throw ae
   }
+  _.setName(ret, `a-sert.err(${_.getName(ee)}, ${_.getName(fn)})`)
+  return ret
 }
+_.setName(a.err, 'a-sert.err')
 
 a.err.sync = (ee, fn) => {
   const ae = new Error()
   ae.name = 'AssertionError'
   Error.captureStackTrace(ae)
-  return x => {
+  const ret = x => {
     try {
       fn(x)
     } catch (fe) {
@@ -117,6 +128,9 @@ a.err.sync = (ee, fn) => {
     ae.message = `did not throw ${ee}`
     throw ae
   }
+  _.setName(ret, `a-sert.err(${_.getName(ee)}, ${_.getName(fn)})`)
+  return ret
 }
+_.setName(a.err.sync, 'a-sert.err')
 
 module.exports = a
