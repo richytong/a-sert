@@ -35,7 +35,7 @@ const fmtErrorMessage = (x, operator, y) => [
 a.eq = (...fns) => {
   const e = new Error()
   e.name = 'AssertionError'
-  Error.captureStackTrace(e)
+  Error.captureStackTrace(e, a.eq)
   fns = fns.map(_.toFn)
   const ret = async x => {
     const first = await fns[0](x)
@@ -59,7 +59,7 @@ _.setName(a.eq, 'a-sert.eq')
 a.eq.sync = (...fns) => {
   const e = new Error()
   e.name = 'AssertionError'
-  Error.captureStackTrace(e)
+  Error.captureStackTrace(e, a.eq.sync)
   fns = fns.map(_.toFn)
   const ret = x => {
     const first = fns[0](x)
@@ -98,7 +98,7 @@ const handleErrorExpectations = (ae, ee, fe) => {
 a.err = (ee, fn) => {
   const ae = new Error()
   ae.name = 'AssertionError'
-  Error.captureStackTrace(ae)
+  Error.captureStackTrace(ae, a.err)
   const ret = async x => {
     try {
       await fn(x)
@@ -117,7 +117,7 @@ _.setName(a.err, 'a-sert.err')
 a.err.sync = (ee, fn) => {
   const ae = new Error()
   ae.name = 'AssertionError'
-  Error.captureStackTrace(ae)
+  Error.captureStackTrace(ae, a.err.sync)
   const ret = x => {
     try {
       fn(x)
