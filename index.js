@@ -95,7 +95,7 @@ const handleErrorExpectations = (ae, ee, fe) => {
   }
 }
 
-a.err = (ee, fn) => {
+a.err = (fn, ee) => {
   const ae = new Error()
   ae.name = 'AssertionError'
   Error.captureStackTrace(ae, a.err)
@@ -114,7 +114,7 @@ a.err = (ee, fn) => {
 }
 _.setName(a.err, 'a-sert.err')
 
-a.err.sync = (ee, fn) => {
+a.err.sync = (fn, ee) => {
   const ae = new Error()
   ae.name = 'AssertionError'
   Error.captureStackTrace(ae, a.err.sync)
