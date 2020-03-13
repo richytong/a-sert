@@ -5,6 +5,38 @@ const isDeepEqual = (x, y) => deepEqual(x, y, { strict: true })
 
 const a = {}
 
+a.ok = fn => {
+  const e = new Error()
+  e.name = 'AssertionError'
+  Error.captureStackTrace(e, a.ok)
+  fn = _.toFn(fn)
+  const ret = async x => {
+    if (!(await fn(x))) {
+      e.message = `not ok: (${_.shorthand(fn)})(${_.shorthand(x)})`
+      throw e
+    }
+  }
+  _.setName(ret, `a.ok(${_.shorthand(fn)})`)
+  return ret
+}
+_.setName(a.ok, 'a-sert.ok')
+
+a.ok.sync = fn => {
+  const e = new Error()
+  e.name = 'AssertionError'
+  Error.captureStackTrace(e, a.ok)
+  fn = _.toFn(fn)
+  const ret = x => {
+    if (!fn(x)) {
+      e.message = `not ok: (${_.shorthand(fn)})(${_.shorthand(x)})`
+      throw e
+    }
+  }
+  _.setName(ret, `a.ok(${_.shorthand(fn)})`)
+  return ret
+}
+_.setName(a.ok.sync, 'a-sert.ok')
+
 const fmtType = x => {
   if (x === undefined) return 'undefined'
   if (x === null) return 'null'

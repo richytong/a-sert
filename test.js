@@ -1,3 +1,4 @@
+const _ = require('rubico')
 const a = require('.')
 const assert = require('assert')
 
@@ -9,6 +10,36 @@ const newAssertionError = message => {
 }
 
 describe('a-sert', () => {
+  describe('a.ok', () => {
+    it('checks truthy', async () => {
+      a.ok(true)('hey')
+      a.ok(() => true)('hey')
+      assert.rejects(
+        () => a.ok(false)('hey'),
+        newAssertionError('not ok: (() => false)(\'hey\')'),
+      )
+      assert.rejects(
+        () => a.ok(_.not(_.id))('hey'),
+        newAssertionError('not ok: (not(id))(\'hey\')'),
+      )
+    })
+  })
+
+  describe('a.ok.sync', () => {
+    it('checks truthy', async () => {
+      a.ok.sync(true)('hey')
+      a.ok.sync(() => true)('hey')
+      assert.throws(
+        () => a.ok.sync(false)('hey'),
+        newAssertionError('not ok: (() => false)(\'hey\')'),
+      )
+      assert.throws(
+        () => a.ok.sync(_.not.sync(_.id))('hey'),
+        newAssertionError('not ok: (not(id))(\'hey\')'),
+      )
+    })
+  })
+
   describe('a.eq', () => {
     it('passes args along for strict equality', async () => {
       a.eq(1, x => x.a)({ a: 1 })
