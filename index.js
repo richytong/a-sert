@@ -15,6 +15,7 @@ a.ok = fn => {
       e.message = `not ok: (${_.shorthand(fn)})(${_.shorthand(x)})`
       throw e
     }
+    return x
   }
   _.setName(ret, `a.ok(${_.shorthand(fn)})`)
   return ret
@@ -31,6 +32,7 @@ a.ok.sync = fn => {
       e.message = `not ok: (${_.shorthand(fn)})(${_.shorthand(x)})`
       throw e
     }
+    return x
   }
   _.setName(ret, `a.ok(${_.shorthand(fn)})`)
   return ret

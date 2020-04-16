@@ -12,7 +12,10 @@ const newAssertionError = message => {
 describe('a-sert', () => {
   describe('a.ok', () => {
     it('checks truthy', async () => {
-      a.ok(true)('hey')
+      assert.strictEqual(
+        await a.ok(true)('hey'),
+        'hey',
+      ),
       a.ok(() => true)('hey')
       assert.rejects(
         () => a.ok(false)('hey'),
